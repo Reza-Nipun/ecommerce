@@ -67,6 +67,12 @@
         width: 30%;
     }
 
+    .cart-list-devider{
+        border-bottom: solid 1px #8b98ab;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+
 </style>
 
 </html>

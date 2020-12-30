@@ -4,11 +4,15 @@
 
     <div class="custom-product">
 
-        <div class="col-sm-3">
-            <a href="#">Filter</a>
+        <div class="col-sm-2">
+            <div class="trending-wrapper">
+                <hr>
+                <h3>Filter</h3>
+                <hr>
+            </div>
         </div>
 
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <div class="trending-wrapper">
                 <hr>
                 <h3>Search Result</h3>
