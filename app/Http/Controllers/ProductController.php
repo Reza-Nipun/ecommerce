@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Cart;
+use App\Order;
 
 use Session;
 use Illuminate\Support\Facades\DB;
@@ -59,10 +60,60 @@ class ProductController extends Controller
         $products = DB::table('cart')
                     ->join('products', 'cart.product_id', '=', 'products.id')
                     ->where('cart.user_id', $user_id)
-                    ->select('products.*')
+                    ->select('products.*', 'cart.id as cart_id')
                     ->get();
 
         return view('cart_list', ['products'=>$products]);
 
+    }
+
+    function removeCart($cart_id){
+        Cart::destroy($cart_id);
+
+        return redirect('cart_list');
+    }
+
+    function orderNow(){
+        $user_id = Session::get('user')['id'];
+
+        $total = DB::table('cart')
+            ->join('products', 'cart.product_id', '=', 'products.id')
+            ->where('cart.user_id', $user_id)
+            ->select('products.*', 'cart.id as cart_id')
+            ->sum('products.price');
+
+        return view('order_now', ['total'=>$total]);
+    }
+
+    function orderPlace(Request $request){
+        $user_id = Session::get('user')['id'];
+        $all_cart = Cart::where('user_id', $user_id)->get();
+
+        foreach ($all_cart as $cart){
+            $order = new Order();
+            $order->product_id = $cart['product_id'];
+            $order->user_id = $cart['user_id'];
+            $order->status = 'pending';
+            $order->payment_method = $request->payment;
+            $order->payment_status = 'pending';
+            $order->address = $request->address;
+            $order->save();
+
+
+        }
+        Cart::where('user_id', $user_id)->delete();
+
+        return redirect('/');
+    }
+
+    function myOrders(){
+        $user_id = Session::get('user')['id'];
+
+        $orders = DB::table('orders')
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->where('orders.user_id', $user_id)
+            ->get();
+
+        return view('my_orders', ['orders'=>$orders]);
     }
 }

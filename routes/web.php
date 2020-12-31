@@ -28,7 +28,11 @@ Route::get('/logout', function () {
 Route::post("/login", [UserController::class, 'login']);
 Route::get("/", [ProductController::class, 'index']);
 Route::get("detail/{id}", [ProductController::class, 'detail']);
+Route::get("remove_cart/{id}", [ProductController::class, 'removeCart']);
 Route::get("/search", [ProductController::class, 'search']);
 Route::post("/add_to_cart", [ProductController::class, 'addToCart']);
 Route::get("/cart_list", [ProductController::class, 'cartList']);
+Route::get("/order_now", [ProductController::class, 'orderNow']);
+Route::post("/order_place", [ProductController::class, 'orderPlace']);
+Route::get("/my_orders", [ProductController::class, 'myOrders']);
 
